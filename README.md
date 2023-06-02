@@ -17,6 +17,9 @@ End the calculating expressions with `=` to automatically show the computed resu
 ## Demo
 Try out the demo directly online at [https://aarkue.github.io/tiptap-math-extension/](https://aarkue.github.io/tiptap-math-extension/)!
 
+![image](https://github.com/aarkue/tiptap-math-extension/assets/20766652/484b4ef4-f672-41b7-9d08-d78df104cea6)
+
+
 ![2023-06-02_18-09](https://github.com/aarkue/tiptap-math-extension/assets/20766652/8540b19d-58c1-46ca-b3ca-3bea96d5bdb2)
 
 
