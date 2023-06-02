@@ -75,3 +75,11 @@ button:focus-visible {
   background-color: #fafafa;
   padding: 4px;
 }
+
+.tiptap-math.result {
+  background-color: #78e65618;
+  border-bottom: rgb(68, 194, 68) 2px solid;
+  margin-left: 2px;
+  padding-right: 2px;
+  padding-left: 2px;
+}
