@@ -30,7 +30,7 @@ export function generateID() {
     "Y",
     "Z",
   ];
-  const RAND_ID_LEN = 367;
+  const RAND_ID_LEN = 36;
   let id = "";
   for (let i = 1; i <= RAND_ID_LEN; i++) {
     const c = ALL_ALLOWED_CHARS_UPPER[Math.floor(Math.random() * ALL_ALLOWED_CHARS_UPPER.length)];
