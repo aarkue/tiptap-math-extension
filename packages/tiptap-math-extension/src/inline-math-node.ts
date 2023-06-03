@@ -12,7 +12,7 @@ export const InlineMathNode = Node.create({
   name: "inlineMath",
   group: "inline",
   inline: true,
-  selectable: false,
+  selectable: true,
   atom: true,
 
   addAttributes() {
