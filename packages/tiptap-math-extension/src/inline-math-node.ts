@@ -35,6 +35,15 @@ export const InlineMathNode = Node.create({
           };
         },
       },
+      display: {
+        default: "no",
+        parseHTML: (element) => element.getAttribute("data-display"),
+        renderHTML: (attributes) => {
+          return {
+            "data-display": attributes.display,
+          };
+        },
+      },
     };
   },
 
