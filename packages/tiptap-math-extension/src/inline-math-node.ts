@@ -138,7 +138,7 @@ export const InlineMathNode = Node.create({
     return [
       "span",
       mergeAttributes(HTMLAttributes, {
-        "data-content-type": this.name,
+        "data-type": this.name,
       }),
       "$" + latex + "$",
     ];
