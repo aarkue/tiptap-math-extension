@@ -157,7 +157,9 @@ export const InlineMathNode = Node.create({
           state.doc.nodesBetween(anchor - 1, anchor, (node, pos) => {
             if (node.type.name === this.name) {
               isMention = true;
-              tr.insertText("$" + (node.attrs.latex || "") + "", pos, anchor);
+              const displayMode = node.attrs.display === "yes";
+              const [firstDelimiter, secondDelimiter] = displayMode ? ["$$", "$"] : ["$", ""];
+              tr.insertText(firstDelimiter + (node.attrs.latex || "") + secondDelimiter, pos, anchor);
             }
           });
           return isMention;
@@ -174,10 +176,12 @@ export const InlineMathNode = Node.create({
       if ("data-latex" in HTMLAttributes && typeof HTMLAttributes["data-latex"] === "string") {
         latex = HTMLAttributes["data-latex"];
       }
-      katex.render(latex, span, { displayMode: false, throwOnError: false });
+      let displayMode = node.attrs.display === "yes";
+      katex.render(latex, span, { displayMode: displayMode, throwOnError: false });
 
       outerSpan.title = "Click to toggle result";
       outerSpan.style.cursor = "pointer";
+      outerSpan.classList.add("tiptap-math", "latex");
 
       const resultSpan = document.createElement("span");
       outerSpan.append(resultSpan);
