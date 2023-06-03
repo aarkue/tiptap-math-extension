@@ -52,6 +52,9 @@ export const InlineMathNode = Node.create({
       new InputRule({
         find: new RegExp(`\\$([^\\s])([^$]*)\\$$`, ""),
         handler: (props) => {
+          if (props.match[1].startsWith("$")) {
+            return;
+          }
           let latex = props.match[1] + props.match[2];
           const showRes = latex.endsWith("=");
           if (showRes) {
@@ -60,7 +63,34 @@ export const InlineMathNode = Node.create({
           let content: Content = [
             {
               type: "inlineMath",
-              attrs: { latex: latex, evaluate: showRes ? "yes" : "no" },
+              attrs: { latex: latex, evaluate: showRes ? "yes" : "no", display: "no" },
+            },
+          ];
+          props
+            .chain()
+            .insertContentAt(
+              {
+                from: props.range.from,
+                to: props.range.to,
+              },
+              content,
+              { updateSelection: true }
+            )
+            .run();
+        },
+      }),
+      new InputRule({
+        find: new RegExp(`\\$\\$([^\\s])([^$]*)\\$\\$$`, ""),
+        handler: (props) => {
+          let latex = props.match[1] + props.match[2];
+          const showRes = latex.endsWith("=");
+          if (showRes) {
+            latex = latex.substring(0, latex.length - 1);
+          }
+          let content: Content = [
+            {
+              type: "inlineMath",
+              attrs: { latex: latex, evaluate: showRes ? "yes" : "no", display: "yes" },
             },
           ];
           props
@@ -82,9 +112,9 @@ export const InlineMathNode = Node.create({
   addPasteRules() {
     return [
       new PasteRule({
-        find: /\$((?:(?!\$).)*)\$/g,
-
+        find: new RegExp(`\\$([^\\s])([^$]*)\\$$`, "g"),
         handler: (props) => {
+          const latex = props.match[1] + props.match[2];
           props
             .chain()
             .insertContentAt(
@@ -92,7 +122,26 @@ export const InlineMathNode = Node.create({
               [
                 {
                   type: "inlineMath",
-                  attrs: { latex: props.match[1] },
+                  attrs: { latex: latex, evaluate: "no", display: "no" },
+                },
+              ],
+              { updateSelection: true }
+            )
+            .run();
+        },
+      }),
+      new PasteRule({
+        find: new RegExp(`\\$\\$([^\\s])([^$]*)\\$\\$$`, "g"),
+        handler: (props) => {
+          const latex = props.match[1] + props.match[2];
+          props
+            .chain()
+            .insertContentAt(
+              { from: props.range.from, to: props.range.to },
+              [
+                {
+                  type: "inlineMath",
+                  attrs: { latex: latex, evaluate: "no", display: "yes" },
                 },
               ],
               { updateSelection: true }
