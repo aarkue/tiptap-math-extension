@@ -23,12 +23,9 @@ End the calculating expressions with `=` to automatically show the computed resu
 ## Screenshots + Demo
 Try out the demo directly online at [https://aarkue.github.io/tiptap-math-extension/](https://aarkue.github.io/tiptap-math-extension/)!
 
-![image](https://github.com/aarkue/tiptap-math-extension/assets/20766652/484b4ef4-f672-41b7-9d08-d78df104cea6)
+![2023-06-03_16-05](https://github.com/aarkue/tiptap-math-extension/assets/20766652/3f5cc6d5-f0eb-4c2a-9ba7-87367cfdf119)
 
-
-![2023-06-02_18-09](https://github.com/aarkue/tiptap-math-extension/assets/20766652/8540b19d-58c1-46ca-b3ca-3bea96d5bdb2)
-
-
+![2023-06-03_16-05_1](https://github.com/aarkue/tiptap-math-extension/assets/20766652/a722b978-06ef-48c0-8aa0-ba9bedff58a1)
 
 
 https://github.com/aarkue/tiptap-math-extension/assets/20766652/96f31846-d4a8-4cb2-b963-ff6da57daeb1
