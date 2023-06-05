@@ -35,16 +35,14 @@ export function evaluateExpression(
     if (definesVariable) {
       aliases = getVariableAliases(definesVariable);
     }
-    changedLatex = getVariableName(changedLatex.replace("}", "} "));
+    changedLatex = getVariableName(changedLatex.replace("}", "}"));
     for (const id in variables) {
       const variable: MathVariable = variables[id];
       variableObj[id] = variable.value;
       for (const alias of variable.aliases) {
-        // Replace all occurences of alias with 
-        // TODO: Also allow more symbols (e.g., _,^,...)
-        const r = new RegExp("(^|(?<=[\\s{}]))" + alias + "($|(?=[\\s{()}]))","g")
-        console.log({changedLatex,r,alias});
-        changedLatex = changedLatex.replace(r,id);
+        // Replace all occurences of alias with
+        const r = new RegExp("(^|(?<=[^a-zA-Z]))" + alias + "($|(?=[^a-zA-Z]))", "g");
+        changedLatex = changedLatex.replace(r, id);
         for (const a of aliases) {
           if (alias === a) {
             definedVariableID = id;
@@ -82,6 +80,7 @@ export function evaluateExpression(
       result: resNum,
     };
   } catch (e) {
+    console.log(e);
     return undefined;
   }
 }
