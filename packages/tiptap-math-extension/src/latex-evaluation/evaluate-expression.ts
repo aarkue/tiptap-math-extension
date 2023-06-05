@@ -17,7 +17,6 @@ export function evaluateExpression(
       variablesUsed: Set<string>;
     }
   | undefined {
-  console.log({ latex, variables });
   try {
     const regex = /\\pi({})?/g;
     let changedLatex = latex.trim().replace(regex, " PI");
@@ -36,14 +35,14 @@ export function evaluateExpression(
     if (definesVariable) {
       aliases = getVariableAliases(definesVariable);
     }
-    changedLatex = getVariableName(changedLatex.replace("}", "} "));
-    // console.log({ changedLatex });
+    changedLatex = getVariableName(changedLatex.replace("}", "}"));
     for (const id in variables) {
       const variable: MathVariable = variables[id];
       variableObj[id] = variable.value;
       for (const alias of variable.aliases) {
-        // Replace all occurences of alias with id
-        changedLatex = changedLatex.split(alias).join(id);
+        // Replace all occurences of alias with
+        const r = new RegExp("(^|(?<=[^a-zA-Z]))" + alias + "($|(?=[^a-zA-Z]))", "g");
+        changedLatex = changedLatex.replace(r, id);
         for (const a of aliases) {
           if (alias === a) {
             definedVariableID = id;
@@ -57,7 +56,6 @@ export function evaluateExpression(
 
     if (definesVariable !== undefined) {
       if (definedVariableID === undefined) {
-        console.log({ changedLatex, variableObj, definedVariableID, definesVariable });
         definedVariableID = generateID();
       }
       // Cyclic dependency! Fail early
@@ -82,6 +80,7 @@ export function evaluateExpression(
       result: resNum,
     };
   } catch (e) {
+    console.log(e);
     return undefined;
   }
 }
