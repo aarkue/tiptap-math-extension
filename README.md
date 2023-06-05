@@ -5,7 +5,8 @@ Use inline math LaTeX directly in your editor!
 
 ## Usage
 See the demo at `/example` for a quick introduction on how to use this package.
-There is currently no `npmjs.org` package published, but meanwhile, this extension can also be quickly installed from GitHub directly using `npm`. 
+There is currently no `npmjs.org` package published, but meanwhile, this extension can also be quickly installed from GitHub directly using `npm`.
+For example, it can be installed using [gitpkg.now.sh](https://gitpkg.now.sh) using the command `npm install 'https://gitpkg.now.sh/aarkue/tiptap-math-extension/packages/tiptap-math-extension?main'` and then `cd`ing into the node_modules/... folder and running `npm install` and `npm run build`.
 
 ## Features
 ### Display Inline LaTeX
