@@ -56,6 +56,7 @@ export const InlineMathNode = Node.create({
             return;
           }
           let latex = props.match[1] + props.match[2];
+          latex = latex.trim();
           const showRes = latex.endsWith("=");
           if (showRes) {
             latex = latex.substring(0, latex.length - 1);
