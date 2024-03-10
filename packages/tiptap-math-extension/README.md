@@ -1,12 +1,12 @@
 # Math/LaTeX Extension for the TipTap Editor
 
-Use inline math LaTeX directly in your editor!
+Use inline math expression / LaTeX directly in your editor!
 
 
 ## Usage
 See the demo at `/example` for a quick introduction on how to use this package.
-There is currently no `npmjs.org` package published, but meanwhile, this extension can also be quickly installed from GitHub directly using `npm`.
-For example, it can be installed using [gitpkg.now.sh](https://gitpkg.now.sh) using the command `npm install 'https://gitpkg.now.sh/aarkue/tiptap-math-extension/packages/tiptap-math-extension?main'` and then `cd`ing into the node_modules/... folder and running `npm install` and `npm run build`.
+The __package is now available on NPM__ as [__@aarkue/tiptap-math-extension__](https://www.npmjs.com/package/@aarkue/tiptap-math-extension).
+It can be installed using `npm install @aarkue/tiptap-math-extension`.
 
 ## Features
 ### Display Inline LaTeX
@@ -15,6 +15,14 @@ Writing a math expression delimetered with `$`-signs automatically creates a ren
 To edit or delete the LaTeX, simply press backspace with the cursor places before the expression.
 The rendered LaTeX will disappear and the LaTeX source will become normal editable text again.
 ### Evaluate LaTeX Expression
+__Note: Since version 1.2.0 this feature needs to be explicitly enabled__.
+This can be done using the `evaluate` configuration option:
+```typescript
+  const editor = useEditor({
+    extensions: [StarterKit, MathExtension.configure({evaluation: false})],
+    content: "<p>Hello World!</p>",
+  });
+```
 Calculation results can be shown inline, using the [Evaluatex.js]([https://arthanzel.github.io/evaluatex/) library.
 
 Define variables using the `:=` notation (e.g., `x := 120`).
@@ -30,6 +38,17 @@ Try out the demo directly online at [https://aarkue.github.io/tiptap-math-extens
 
 
 https://github.com/aarkue/tiptap-math-extension/assets/20766652/96f31846-d4a8-4cb2-b963-ff6da57daeb1
+
+
+## Options
+There are a few options available to configure the extension. See below for typescript definitions of all available options and their default value.
+```typescript
+export interface MathExtensionOption {
+  evaluation: boolean; // Evaluate LaTeX expressions
+  addInlineMath: boolean; // Add InlineMath node type (currently required as inline is the only supported mode)
+}
+export const DEFAULT_OPTIONS = { addInlineMath: true, evaluation: false };
+```
 
 ## Related or Used Projects
 - [Tiptap Editor](https://github.com/ueberdosis/tiptap): The extensible editor for which this is an extension.

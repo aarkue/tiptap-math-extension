@@ -5,7 +5,7 @@ import "katex/dist/katex.min.css";
 
 const Tiptap = () => {
   const editor = useEditor({
-    extensions: [StarterKit, MathExtension],
+    extensions: [StarterKit, MathExtension.configure({evaluation: false})],
     content: "<p>Hello World!</p>",
   });
 
