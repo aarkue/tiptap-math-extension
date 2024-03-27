@@ -1,12 +1,8 @@
 import { Extension } from "@tiptap/core";
 
 import { InlineMathNode } from "./inline-math-node";
+import { DEFAULT_OPTIONS, MathExtensionOption } from "./util/options";
 
-export interface MathExtensionOption {
-  evaluation: boolean; // Evaluate LaTeX expressions
-  addInlineMath: boolean; // Add InlineMath node type (currently required as inline is the only supported mode)
-}
-export const DEFAULT_OPTIONS = { addInlineMath: true, evaluation: false };
 export const MATH_EXTENSION_NAME = "mathExtension";
 export const MathExtension = Extension.create<MathExtensionOption>({
   name: MATH_EXTENSION_NAME,
@@ -25,6 +21,6 @@ export const MathExtension = Extension.create<MathExtensionOption>({
   },
 });
 
-export { InlineMathNode };
-
+export { InlineMathNode, DEFAULT_OPTIONS };
+export type { MathExtensionOption };
 export default MathExtension;

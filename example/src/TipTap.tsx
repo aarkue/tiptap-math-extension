@@ -5,11 +5,14 @@ import "katex/dist/katex.min.css";
 
 const Tiptap = () => {
   const editor = useEditor({
-    extensions: [StarterKit, MathExtension.configure({evaluation: false})],
+    extensions: [
+      StarterKit,
+      MathExtension.configure({ evaluation: true, katexOptions: { macros: { "\\R": "\\mathbb{R}" } } }),
+    ],
     content: "<p>Hello World!</p>",
   });
 
-  return <EditorContent editor={editor} className="tiptap-editor"  />;
+  return <EditorContent editor={editor} className="tiptap-editor" />;
 };
 
 export default Tiptap;

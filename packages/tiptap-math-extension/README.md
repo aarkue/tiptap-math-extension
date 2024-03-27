@@ -44,8 +44,12 @@ https://github.com/aarkue/tiptap-math-extension/assets/20766652/96f31846-d4a8-4c
 There are a few options available to configure the extension. See below for typescript definitions of all available options and their default value.
 ```typescript
 export interface MathExtensionOption {
-  evaluation: boolean; // Evaluate LaTeX expressions
-  addInlineMath: boolean; // Add InlineMath node type (currently required as inline is the only supported mode)
+  /** Evaluate LaTeX expressions */
+  evaluation: boolean;
+  /** Add InlineMath node type (currently required as inline is the only supported mode) */
+  addInlineMath: boolean;
+  /** KaTeX options to use for evaluation, see also https://katex.org/docs/options.html */
+  katexOptions?: KatexOptions;
 }
 export const DEFAULT_OPTIONS = { addInlineMath: true, evaluation: false };
 ```

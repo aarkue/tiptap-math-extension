@@ -7,7 +7,7 @@ import {
 } from "./latex-evaluation/evaluate-expression";
 import { generateID } from "./util/generate-id";
 import { updateEvaluation } from "./latex-evaluation/update-evaluation";
-import { DEFAULT_OPTIONS, MathExtensionOption as MathExtensionOptions } from ".";
+import { DEFAULT_OPTIONS, MathExtensionOption as MathExtensionOptions } from "./util/options";
 
 export const InlineMathNode = Node.create<MathExtensionOptions>({
   name: "inlineMath",
@@ -232,7 +232,7 @@ export const InlineMathNode = Node.create<MathExtensionOptions>({
         latex = HTMLAttributes["data-latex"];
       }
       let displayMode = node.attrs.display === "yes";
-      katex.render(latex, span, { displayMode: displayMode, throwOnError: false });
+      katex.render(latex, span, { displayMode: displayMode, throwOnError: false, ...(this.options.katexOptions ?? {}) });
 
       outerSpan.classList.add("tiptap-math", "latex");
 
