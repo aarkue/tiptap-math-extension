@@ -7,7 +7,7 @@ const Tiptap = () => {
   const editor = useEditor({
     extensions: [
       StarterKit,
-      MathExtension.configure({ evaluation: true, katexOptions: { macros: { "\\R": "\\mathbb{R}" } } }),
+      MathExtension.configure({ evaluation: true, katexOptions: { macros: { "\\B": "\\mathbb{B}" } } }),
     ],
     content: "<p>Hello World!</p>",
   });
