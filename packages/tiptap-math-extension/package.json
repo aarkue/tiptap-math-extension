@@ -1,7 +1,10 @@
 {
-  "name": "tiptap-math-extension",
-  "version": "1.1.0",
-  "description": "",
+  "name": "@aarkue/tiptap-math-extension",
+  "author": "aarkue",
+  "homepage": "https://github.com/aarkue/tiptap-math-extension",
+  "license": "MIT",
+  "version": "1.2.0",
+  "description": "Math/LaTeX Extension for the TipTap Editor ",
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
