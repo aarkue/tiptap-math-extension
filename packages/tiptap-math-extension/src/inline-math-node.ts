@@ -232,7 +232,11 @@ export const InlineMathNode = Node.create<MathExtensionOptions>({
         latex = HTMLAttributes["data-latex"];
       }
       let displayMode = node.attrs.display === "yes";
-      katex.render(latex, span, { displayMode: displayMode, throwOnError: false, ...(this.options.katexOptions ?? {}) });
+      katex.render(latex, span, {
+        displayMode: displayMode,
+        throwOnError: false,
+        ...(this.options.katexOptions ?? {}),
+      });
 
       outerSpan.classList.add("tiptap-math", "latex");
 
