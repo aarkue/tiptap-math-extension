@@ -1,6 +1,15 @@
-# Math/LaTeX Extension for the TipTap Editor
+<div align="center">
+<h1>Math/LaTeX Extension for the TipTap Editor</h1>
+  <p>Use inline math expression / LaTeX directly in your editor!</p>
+  <p>
+    
+[![npm license](https://img.shields.io/npm/l/%40aarkue%2Ftiptap-math-extension)](https://www.npmjs.com/package/@aarkue/tiptap-math-extension)
+[![npm version](https://img.shields.io/npm/v/%40aarkue%2Ftiptap-math-extension)](https://www.npmjs.com/package/@aarkue/tiptap-math-extension)
+[![npm downloads](https://img.shields.io/npm/dy/%40aarkue%2Ftiptap-math-extension)](https://www.npmjs.com/package/@aarkue/tiptap-math-extension)
 
-Use inline math expression / LaTeX directly in your editor!
+  </p>
+</div>
+
 
 ## Usage
 
