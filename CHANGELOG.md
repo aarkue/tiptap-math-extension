@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.2.2 (2024-04-09)
+### Breaking
+- Disable evaluation mode by default
+
+## 1.2.1 (2024-03-27)
+### New
+- Updated README to include instructions on includidng KaTeX CSS
+
+## 1.2.0 (2024-03-10)
+### New
+- Added extension options 
+  - Allow disabling evaluation mode
+  - Update README with options
+
 ## 1.1.0 (2023-06-03)
 ### New
 - Display math using the `$$\sum_{i=1}^n x_i$$` notation
