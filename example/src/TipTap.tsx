@@ -10,16 +10,38 @@ const Tiptap = () => {
       StarterKit,
       MathExtension.configure({ evaluation: false, katexOptions: { macros: { "\\B": "\\mathbb{B}" } } }),
     ],
-    content: "<p>Hello World!</p>",
+    content: `<p>Hello World!
+      <br/>
+      <br/>
+      This is a sum: <span data-type="inlineMath" data-latex="\\sum_{i=0}^n i^2"></span>
+      <br/>
+      <br/>
+      This is a block math expression:
+      <br/>
+      <span data-type="inlineMath" data-display="yes" data-evaluate="yes" data-latex="\\sum_{i=0}^n i^2"></span>
+      <br/>
+      <br/>
+      Cool, right?</p>`,
   });
 
   useEffect(() => {
-    if(editor){
-      console.log({editor});
+    if (editor) {
+      console.log({ editor });
       (window as any).tiptapEditor = editor;
     }
-  },[editor])
-  return <EditorContent editor={editor} className="tiptap-editor"  />;
+  }, [editor]);
+  return (
+    <div>
+      <button
+        onClick={() => {
+          editor?.commands.insertContent({ type: "inlineMath", attrs: { latex: "x^2 = \\sqrt{x^4}" } });
+        }}
+      >
+        Insert Math
+      </button>
+      <EditorContent editor={editor} className="tiptap-editor" />
+    </div>
+  );
 };
 
 export default Tiptap;
