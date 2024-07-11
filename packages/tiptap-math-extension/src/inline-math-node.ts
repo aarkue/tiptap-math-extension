@@ -7,7 +7,7 @@ import {
 } from "./latex-evaluation/evaluate-expression";
 import { generateID } from "./util/generate-id";
 import { updateEvaluation } from "./latex-evaluation/update-evaluation";
-import { DEFAULT_OPTIONS, MathExtensionOption as MathExtensionOptions } from "./util/options";
+import { DEFAULT_OPTIONS, MathExtensionOption, MathExtensionOption as MathExtensionOptions } from "./util/options";
 
 export const InlineMathNode = Node.create<MathExtensionOptions>({
   name: "inlineMath",
@@ -53,128 +53,134 @@ export const InlineMathNode = Node.create<MathExtensionOptions>({
   },
 
   addInputRules() {
-    return [
-      new InputRule({
-        find: new RegExp(`\\$([^\\s])([^$]*)\\$$`, ""),
-        handler: (props) => {
-          if (props.match[1].startsWith("$")) {
-            return;
-          }
-          let latex = props.match[1] + props.match[2];
-          latex = latex.trim();
-          const showRes = latex.endsWith("=");
-          if (showRes) {
-            latex = latex.substring(0, latex.length - 1);
-          }
-          let content: Content = [
-            {
-              type: "inlineMath",
-              attrs: { latex: latex, evaluate: showRes ? "yes" : "no", display: "no" },
-            },
-          ];
-          props
-            .chain()
-            .insertContentAt(
+    const inputRules = [];
+    const inlineRegex = getRegexFromOptions("inline", this.options);
+    if (inlineRegex !== undefined) {
+      inputRules.push(
+        new InputRule({
+          find: new RegExp(inlineRegex, ""),
+          handler: (props) => {
+            // TODO: Better handling, also for custom regexes
+            // This prevents that $$x_1$ (a block expression in progress) is already captured by inline input rules
+            if (
+              (this.options.delimiters === undefined || this.options.delimiters === "dollar") &&
+              props.match[1].startsWith("$")
+            ) {
+              return;
+            }
+            let latex = props.match[1] + props.match[2];
+            latex = latex.trim();
+            const showRes = latex.endsWith("=");
+            if (showRes) {
+              latex = latex.substring(0, latex.length - 1);
+            }
+            let content: Content = [
               {
-                from: props.range.from,
-                to: props.range.to,
+                type: "inlineMath",
+                attrs: { latex: latex, evaluate: showRes ? "yes" : "no", display: "no" },
               },
-              content,
-              { updateSelection: true }
-            )
-            .run();
-        },
-      }),
-      new InputRule({
-        find: new RegExp(`\\$\\$([^\\s])([^$]*)\\$\\$$`, ""),
-        handler: (props) => {
-          let latex = props.match[1] + props.match[2];
-          const showRes = latex.endsWith("=");
-          if (showRes) {
-            latex = latex.substring(0, latex.length - 1);
-          }
-          let content: Content = [
-            {
-              type: "inlineMath",
-              attrs: { latex: latex, evaluate: showRes ? "yes" : "no", display: "yes" },
-            },
-          ];
-          props
-            .chain()
-            .insertContentAt(
+            ];
+            props
+              .chain()
+              .insertContentAt(
+                {
+                  from: props.range.from,
+                  to: props.range.to,
+                },
+                content,
+                { updateSelection: true }
+              )
+              .run();
+          },
+        })
+      );
+    }
+    const blockRegex = getRegexFromOptions("block", this.options);
+    if (blockRegex !== undefined) {
+      inputRules.push(
+        new InputRule({
+          find: new RegExp(blockRegex, ""),
+          handler: (props) => {
+            let latex = props.match[1] + props.match[2];
+            const showRes = latex.endsWith("=");
+            if (showRes) {
+              latex = latex.substring(0, latex.length - 1);
+            }
+            let content: Content = [
               {
-                from: props.range.from,
-                to: props.range.to,
+                type: "inlineMath",
+                attrs: { latex: latex, evaluate: showRes ? "yes" : "no", display: "yes" },
               },
-              content,
-              { updateSelection: true }
-            )
-            .run();
-        },
-      }),
-    ];
+            ];
+            props
+              .chain()
+              .insertContentAt(
+                {
+                  from: props.range.from,
+                  to: props.range.to,
+                },
+                content,
+                { updateSelection: true }
+              )
+              .run();
+          },
+        })
+      );
+    }
+    return inputRules;
   },
 
   addPasteRules() {
-    return [
-      new PasteRule({
-        find: new RegExp(`\\$([^\\s])([^$]*)\\$$`, "g"),
-        handler: (props) => {
-          const latex = props.match[1] + props.match[2];
-          props
-            .chain()
-            .insertContentAt(
-              { from: props.range.from, to: props.range.to },
-              [
-                {
-                  type: "inlineMath",
-                  attrs: { latex: latex, evaluate: "no", display: "no" },
-                },
-              ],
-              { updateSelection: true }
-            )
-            .run();
-        },
-      }),
-      new PasteRule({
-        find: new RegExp(`\\$\\$([^\\s])([^$]*)\\$\\$$`, "g"),
-        handler: (props) => {
-          const latex = props.match[1] + props.match[2];
-          props
-            .chain()
-            .insertContentAt(
-              { from: props.range.from, to: props.range.to },
-              [
-                {
-                  type: "inlineMath",
-                  attrs: { latex: latex, evaluate: "no", display: "yes" },
-                },
-              ],
-              { updateSelection: true }
-            )
-            .run();
-        },
-      }),
-      new PasteRule({
-        find: /\\\(((.|[\r\n])*?)\\\)/g,
-
-        handler: (props) => {
-          props
-            .chain()
-            .insertContentAt(
-              { from: props.range.from, to: props.range.to },
-              [
-                {
-                  type: "inlineMath",
-                  attrs: { latex: props.match[1] },
-                },
-              ],
-              { updateSelection: true }
-            )
-            .run();
-        },
-      }),
-    ];
+    const pasteRules = [];
+    const inlineRegex = getRegexFromOptions("inline", this.options);
+    if (inlineRegex !== undefined) {
+      pasteRules.push(
+        new PasteRule({
+          find: new RegExp(inlineRegex, "g"),
+          handler: (props) => {
+            const latex = props.match[1] + props.match[2];
+            props
+              .chain()
+              .insertContentAt(
+                { from: props.range.from, to: props.range.to },
+                [
+                  {
+                    type: "inlineMath",
+                    attrs: { latex: latex, evaluate: "no", display: "no" },
+                  },
+                ],
+                { updateSelection: true }
+              )
+              .run();
+          },
+        })
+      );
+    }
+    const blockRegex = getRegexFromOptions("block", this.options);
+    if (blockRegex !== undefined) {
+      pasteRules.push(
+        new PasteRule({
+          find: new RegExp(blockRegex, "g"),
+          handler: (props) => {
+            const latex = props.match[1] + props.match[2];
+            props
+              .chain()
+              .insertContentAt(
+                { from: props.range.from, to: props.range.to },
+                [
+                  {
+                    type: "inlineMath",
+                    attrs: { latex: latex, evaluate: "no", display: "yes" },
+                  },
+                ],
+                { updateSelection: true }
+              )
+              .run();
+          },
+        })
+      );
+    }
+    return pasteRules;
   },
 
   parseHTML() {
@@ -195,7 +201,9 @@ export const InlineMathNode = Node.create<MathExtensionOptions>({
       mergeAttributes(HTMLAttributes, {
         "data-type": this.name,
       }),
-      "$" + latex + "$",
+      getDelimiter(node.attrs.display === "yes" ? "block" : "inline", "start", this.options) +
+        latex +
+        getDelimiter(node.attrs.display === "yes" ? "block" : "inline", "end", this.options),
     ];
   },
 
@@ -213,7 +221,9 @@ export const InlineMathNode = Node.create<MathExtensionOptions>({
             if (node.type.name === this.name) {
               isMention = true;
               const displayMode = node.attrs.display === "yes";
-              const [firstDelimiter, secondDelimiter] = displayMode ? ["$$", "$"] : ["$", ""];
+              const firstDelimiter = getDelimiter(displayMode ? "block" : "inline", "start", this.options);
+              let secondDelimiter = getDelimiter(displayMode ? "block" : "inline", "end", this.options);
+              secondDelimiter = secondDelimiter.substring(0, secondDelimiter.length - 1);
               tr.insertText(firstDelimiter + (node.attrs.latex || "") + secondDelimiter, pos, anchor);
             }
           });
@@ -304,3 +314,63 @@ export const InlineMathNode = Node.create<MathExtensionOptions>({
     };
   },
 });
+
+function getRegexFromOptions(mode: "inline" | "block", options: MathExtensionOption): string | undefined {
+  if (options.delimiters === undefined || options.delimiters === "dollar") {
+    if (mode === "inline") {
+      return String.raw`\$([^\s])([^$]*)\$$`;
+    } else {
+      return String.raw`\$\$([^\\s])([^$]*)\$\$$`;
+    }
+  } else if (options.delimiters === "bracket") {
+    if (mode === "inline") {
+      return String.raw`\\\(([^\s])([^$]*)\\\)$`;
+    } else {
+      return String.raw`\\\[([^\s])([^$]*)\\\]$`;
+    }
+  } else {
+    if (mode === "inline") {
+      return options.delimiters.inlineRegex;
+    } else {
+      return options.delimiters.blockRegex;
+    }
+  }
+}
+
+function getDelimiter(mode: "inline" | "block", position: "start" | "end", options: MathExtensionOption) {
+  if (options.delimiters === undefined || options.delimiters === "dollar") {
+    if (mode === "inline") {
+      return "$";
+    } else {
+      return "$$";
+    }
+  } else if (options.delimiters === "bracket") {
+    if (mode === "inline") {
+      if (position === "start") {
+        return String.raw`\(`;
+      } else {
+        return String.raw`\)`;
+      }
+    } else {
+      if (position === "start") {
+        return String.raw`\[`;
+      } else {
+        return String.raw`\]`;
+      }
+    }
+  } else {
+    if (mode === "inline") {
+      if (position === "start") {
+        return options.delimiters.inlineStart ?? "$";
+      } else {
+        return options.delimiters.inlineEnd ?? "$";
+      }
+    } else {
+      if (position === "start") {
+        return options.delimiters.blockStart ?? "$$";
+      } else {
+        return options.delimiters.blockEnd ?? "$$";
+      }
+    }
+  }
+}
