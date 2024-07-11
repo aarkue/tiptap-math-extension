@@ -20,15 +20,16 @@ It can be installed using `npm install @aarkue/tiptap-math-extension`.
 To correctly render the LaTeX expressions, you will also need to include the **KaTeX CSS**.
 If you are using [vite](https://vitejs.dev/) you can use `import "katex/dist/katex.min.css";` in the component which renders the tiptap editor.
 This requires that you also install the `katex` npm package using `npm i katex` (https://www.npmjs.com/package/katex).
-There are also different ways to include the CSS, for instance by using a CDN like `jsdelivr.net`. See https://katex.org/docs/browser for more information. Note, however, that only the CSS needs to be included manually as the JS is already bundled with this plugin.
+There are also different ways to include the CSS, for instance by using a CDN like `jsdelivr.net`. See https://katex.org/docs/browser for more information. Note, however, that only the CSS needs to be included manually, as the JS is already bundled with this plugin.
 
 ## Features
 
 ### Display Inline LaTeX
 
-Writing a math expression delimetered with `$`-signs automatically creates a rendered LaTeX expression.
+Writing a math expression surrounded by `$`-signs automatically creates a rendered LaTeX expression.
+The delimiters are also configurable via the corresponding option.
 
-To edit or delete the LaTeX, simply press backspace with the cursor places before the expression.
+To edit or delete the LaTeX, simply press backspace with the cursor placed before the expression.
 The rendered LaTeX will disappear and the LaTeX source will become normal editable text again.
 
 ### Evaluate LaTeX Expression
@@ -71,8 +72,27 @@ export interface MathExtensionOption {
   addInlineMath: boolean;
   /** KaTeX options to use for evaluation, see also https://katex.org/docs/options.html */
   katexOptions?: KatexOptions;
+  /** Delimiters to auto-convert. Per default dollar-style (`dollar`) ($x_1$ and $$\sum_i i$$) are used.
+   *
+   * The `bracket` option corresponds to `\(x_1\)` and `\[\sum_i i \]`.
+   *
+   * Alternatively, custom inline/block regexes can be used.
+   * The inner math content is expected to be the concatination of the matches at index 1 and 2 (`props.match[1] + props.match[2]`).
+   */
+  delimiters?:
+    | "dollar"
+    | "bracket"
+    | {
+        inlineRegex?: string;
+        blockRegex?: string;
+        inlineStart?: string;
+        inlineEnd?: string;
+        blockStart?: string;
+        blockEnd?: string;
+      };
 }
-export const DEFAULT_OPTIONS = { addInlineMath: true, evaluation: false };
+export const DEFAULT_OPTIONS: MathExtensionOption = { addInlineMath: true, evaluation: false, delimiters: "dollar" };
+
 ```
 
 See https://katex.org/docs/options.html for a complete list of the available KaTeX options.
