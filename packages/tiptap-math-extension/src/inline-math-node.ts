@@ -320,7 +320,7 @@ function getRegexFromOptions(mode: "inline" | "block", options: MathExtensionOpt
     if (mode === "inline") {
       return String.raw`\$([^\s])([^$]*)\$$`;
     } else {
-      return String.raw`\$\$([^\\s])([^$]*)\$\$$`;
+      return String.raw`\$\$([^\s])([^$]*)\$\$$`;
     }
   } else if (options.delimiters === "bracket") {
     if (mode === "inline") {
