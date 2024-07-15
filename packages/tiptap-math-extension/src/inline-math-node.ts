@@ -64,11 +64,11 @@ export const InlineMathNode = Node.create<MathExtensionOptions>({
             // This prevents that $$x_1$ (a block expression in progress) is already captured by inline input rules
             if (
               (this.options.delimiters === undefined || this.options.delimiters === "dollar") &&
-              props.match[1].startsWith("$")
+              props.match[1].startsWith("$") || props.match[1].length === 0
             ) {
               return;
             }
-            let latex = props.match[1] + props.match[2];
+            let latex = props.match[1];
             latex = latex.trim();
             const showRes = latex.endsWith("=");
             if (showRes) {
@@ -101,7 +101,7 @@ export const InlineMathNode = Node.create<MathExtensionOptions>({
         new InputRule({
           find: new RegExp(blockRegex, ""),
           handler: (props) => {
-            let latex = props.match[1] + props.match[2];
+            let latex = props.match[1];
             const showRes = latex.endsWith("=");
             if (showRes) {
               latex = latex.substring(0, latex.length - 1);
@@ -138,7 +138,7 @@ export const InlineMathNode = Node.create<MathExtensionOptions>({
         new PasteRule({
           find: new RegExp(inlineRegex, "g"),
           handler: (props) => {
-            const latex = props.match[1] + props.match[2];
+            const latex = props.match[1];
             props
               .chain()
               .insertContentAt(
@@ -162,7 +162,7 @@ export const InlineMathNode = Node.create<MathExtensionOptions>({
         new PasteRule({
           find: new RegExp(blockRegex, "g"),
           handler: (props) => {
-            const latex = props.match[1] + props.match[2];
+            const latex = props.match[1];
             props
               .chain()
               .insertContentAt(
@@ -318,15 +318,15 @@ export const InlineMathNode = Node.create<MathExtensionOptions>({
 function getRegexFromOptions(mode: "inline" | "block", options: MathExtensionOption): string | undefined {
   if (options.delimiters === undefined || options.delimiters === "dollar") {
     if (mode === "inline") {
-      return String.raw`\$([^\s])([^$]*)\$$`;
+      return String.raw`\$(?!\d+[^$]*[.\s])(.*?(?<!\\))\$`;
     } else {
-      return String.raw`\$\$([^\s])([^$]*)\$\$$`;
+      return String.raw`\$\$(?!\s)(.*?(?<!\\))\$\$`;
     }
   } else if (options.delimiters === "bracket") {
     if (mode === "inline") {
-      return String.raw`\\\(([^\s])([^$]*)\\\)$`;
+      return String.raw`\\\((.*?[^\\])\\\)`;
     } else {
-      return String.raw`\\\[([^\s])([^$]*)\\\]$`;
+      return String.raw`\\\[(.*?[^\\])\\\]`;
     }
   } else {
     if (mode === "inline") {

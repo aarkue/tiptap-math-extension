@@ -11,7 +11,7 @@ export interface MathExtensionOption {
    * The `bracket` option corresponds to `\(x_1\)` and `\[\sum_i i \]`.
    *
    * Alternatively, custom inline/block regexes can be used.
-   * The inner math content is expected to be the concatination of the matches at index 1 and 2 (`props.match[1] + props.match[2]`).
+   * The inner math content is expected to be the match at index 1 (`props.match[1]`).
    */
   delimiters?:
     | "dollar"
