@@ -3,7 +3,7 @@
   "author": "aarkue",
   "homepage": "https://github.com/aarkue/tiptap-math-extension",
   "license": "MIT",
-  "version": "1.3.3-beta.2",
+  "version": "1.3.3-beta.3",
   "description": "Math/LaTeX Extension for the TipTap Editor ",
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",
