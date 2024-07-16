@@ -22,6 +22,7 @@ test("Inline Dollar Math Regex", () => {
   expect(r.exec(raw`$1.5$`)[1]).toStrictEqual(raw`1.5`);
   expect(r.exec(raw`$1.23456789$`)[1]).toStrictEqual(raw`1.23456789`);
   expect(r.exec(raw`One scoop is $2 and two are $3`)).toStrictEqual(null);
+  expect(r.exec(raw`One scoop is 2$, and two are 3$`)).toStrictEqual(null);
 });
 
 test("Display Dollar Math Regex", () => {
