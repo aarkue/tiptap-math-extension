@@ -18,7 +18,7 @@ test("Inline Dollar Math Regex", () => {
   expect(r.exec(raw`$1$`)[1]).toStrictEqual(raw`1`);
   // The below test case is, of course, not a wanted match, but we definetely want to have the second $ as part of the input!
   // This allows filtering based on the match (i.e., if it starts with $: return)
-  expect(r.exec(raw`$$x_1$$`)[0]).toStrictEqual(raw`$$x_1$`);
+  expect(r.exec(raw`$$x_1$$`)).toStrictEqual(null);
   expect(r.exec(raw`$1.5$`)[1]).toStrictEqual(raw`1.5`);
   expect(r.exec(raw`$1.23456789$`)[1]).toStrictEqual(raw`1.23456789`);
   expect(r.exec(raw`One scoop is $2 and two are $3`)).toStrictEqual(null);
