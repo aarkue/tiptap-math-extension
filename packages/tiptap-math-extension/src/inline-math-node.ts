@@ -325,7 +325,7 @@ export const InlineMathNode = Node.create<MathExtensionOptions>({
 export function getRegexFromOptions(mode: "inline" | "block", options: MathExtensionOption): string | undefined {
   if (options.delimiters === undefined || options.delimiters === "dollar") {
     if (mode === "inline") {
-      return String.raw`(?<!\$)(?!\$\$)\$(?![$\s])(.*?(?<![\\\s]))\$`;
+      return String.raw`(?<!\$)\$(?![$\s,.])(.*?(?<![\\\s]))\$`;
     } else {
       return String.raw`\$\$(?!\s)(.*?(?<!\\))\$\$`;
     }
