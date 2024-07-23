@@ -23,6 +23,19 @@ test("Inline Dollar Math Regex", () => {
   expect(r.exec(raw`$1.23456789$`)[1]).toStrictEqual(raw`1.23456789`);
   expect(r.exec(raw`One scoop is $2 and two are $3`)).toStrictEqual(null);
   expect(r.exec(raw`One scoop is 2$, and two are 3$`)).toStrictEqual(null);
+  expect(r.exec(raw`$10 ($5)`)).toStrictEqual(null);
+  expect(r.exec(raw`I have $120 ($40 from my allowance and $80 from the card Grandma sent me on my birthday).`)).toStrictEqual(null);
+  // Here the danger is matching starting from the $120; We only want to match $40$!
+  expect(r.exec(raw`I have $120 ($40$ from my allowance and $80 from the card Grandma sent me on my birthday).`)[1]).toStrictEqual(raw`40`);
+  // ...or $80$
+  expect(r.exec(raw`I have $120 ($40 from my allowance and $80$ from the card Grandma sent me on my birthday).`)[1]).toStrictEqual(raw`80`);
+  expect(r.exec(raw`I have $\$120$ ($40 from my allowance and $80$ from the card Grandma sent me on my birthday).`)[1]).toStrictEqual(raw`\$120`);
+  expect(r.exec(raw`I have $120 ($\$40$ from my allowance and $\$80$ from the card Grandma sent me on my birthday).`)[1]).toStrictEqual(raw`\$40`);
+  expect(r.exec(raw`I have $120 ($40 from my allowance and $\$80$ from the card Grandma sent me on my birthday).`)[1]).toStrictEqual(raw`\$80`);
+
+  // Tests with global regex (e.g., relevant for pasting) 
+  const rg = new RegExp(getRegexFromOptions("inline", options), "g");
+  expect([...raw`I have $\$120$ ($40$ from my allowance and $80$ from the card Grandma sent me on my birthday).`.match(rg)]).toStrictEqual([raw`$\$120$`,raw`$40$`,raw`$80$`]);
 });
 
 test("Display Dollar Math Regex", () => {
