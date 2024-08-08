@@ -33,6 +33,9 @@ test("Inline Dollar Math Regex", () => {
   expect(r.exec(raw`I have $120 ($\$40$ from my allowance and $\$80$ from the card Grandma sent me on my birthday).`)[1]).toStrictEqual(raw`\$40`);
   expect(r.exec(raw`I have $120 ($40 from my allowance and $\$80$ from the card Grandma sent me on my birthday).`)[1]).toStrictEqual(raw`\$80`);
 
+  expect(r.exec(raw`I gave Cynthia $5.00 and she said, "$5.00? That's really all you're good for?"`)).toStrictEqual(null);
+  expect(r.exec('${"x"}$')[1]).toStrictEqual('{"x"}');
+
   // Tests with global regex (e.g., relevant for pasting) 
   const rg = new RegExp(getRegexFromOptions("inline", options), "g");
   expect([...raw`I have $\$120$ ($40$ from my allowance and $80$ from the card Grandma sent me on my birthday).`.match(rg)]).toStrictEqual([raw`$\$120$`,raw`$40$`,raw`$80$`]);
