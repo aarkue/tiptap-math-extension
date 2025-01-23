@@ -1,5 +1,6 @@
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+// import { MathExtension } from "@aarkue/tiptap-math-extension";
 import { MathExtension } from "../../packages/tiptap-math-extension/src/index";
 import "katex/dist/katex.min.css";
 import { useEffect } from "react";
@@ -8,7 +9,7 @@ const Tiptap = () => {
   const editor = useEditor({
     extensions: [
       StarterKit,
-      MathExtension.configure({ evaluation: false, katexOptions: { macros: { "\\B": "\\mathbb{B}" } }, delimiters: "dollar" }),
+      MathExtension.configure({ evaluation: true, katexOptions: { macros: { "\\B": "\\mathbb{B}" } }, delimiters: "dollar" }),
     ],
     content: `<p>Hello World!
       <br/>
@@ -18,7 +19,7 @@ const Tiptap = () => {
       <br/>
       This is a block math expression:
       <br/>
-      <span data-type="inlineMath" data-display="yes" data-evaluate="yes" data-latex="\\sum_{i=0}^n i^2"></span>
+      <span data-type="inlineMath" data-display="yes" data-evaluate="no" data-latex="\\sum_{i=0}^n i^2"></span>
       <br/>
       <br/>
       Cool, right?</p>`,

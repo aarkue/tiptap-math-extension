@@ -22,10 +22,11 @@ const config = {
       sourcemap: true,
     },
   ],
+  external: ['evaluatex/dist/evaluatex'],
   plugins: [
     autoExternal({ packagePath: "./package.json" }),
     sourcemaps(),
-    babel(),
+    babel({babelHelpers: "bundled"}),
     commonjs(),
     typescript(),
   ],
