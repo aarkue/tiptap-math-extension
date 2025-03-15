@@ -61,6 +61,7 @@ export const InlineMathNode = Node.create<MathExtensionOptions>({
           find: new RegExp(blockRegex, ""),
           handler: (props) => {
             let latex = props.match[1];
+            latex = latex.replace(/<[^>]*>/g, '');
             if (props.match[1].length === 0) {
               return;
             }
@@ -108,6 +109,7 @@ export const InlineMathNode = Node.create<MathExtensionOptions>({
               return;
             }
             let latex = props.match[1];
+            latex = latex.replace(/<[^>]*>/g, '');
             latex = latex.trim();
             const showRes = latex.endsWith("=");
             if (showRes) {
@@ -146,6 +148,7 @@ export const InlineMathNode = Node.create<MathExtensionOptions>({
           find: new RegExp(blockRegex, "g"),
           handler: (props) => {
             const latex = props.match[1];
+            latex = latex.replace(/<[^>]*>/g, '');
             props
               .chain()
               .insertContentAt(
@@ -170,6 +173,7 @@ export const InlineMathNode = Node.create<MathExtensionOptions>({
           find: new RegExp(inlineRegex, "g"),
           handler: (props) => {
             const latex = props.match[1];
+            latex = latex.replace(/<[^>]*>/g, '');
             props
               .chain()
               .insertContentAt(
