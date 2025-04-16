@@ -209,9 +209,32 @@ export const InlineMathNode = Node.create<MathExtensionOptions>({
         "data-type": this.name,
       }),
       getDelimiter(node.attrs.display === "yes" ? "block" : "inline", "start", this.options) +
-        latex +
-        getDelimiter(node.attrs.display === "yes" ? "block" : "inline", "end", this.options),
+      latex +
+      getDelimiter(node.attrs.display === "yes" ? "block" : "inline", "end", this.options),
     ];
+  },
+
+  renderText({ node }) {
+    if (this.options.renderTextMode === "none") {
+      return "";
+    }
+    if (typeof this.options.renderTextMode === 'object' && "placeholder" in this.options.renderTextMode) {
+      return this.options.renderTextMode.placeholder;
+    }
+    let latex = "x";
+    if (node.attrs.latex && typeof node.attrs.latex == "string") {
+      latex = node.attrs.latex;
+    }
+    if (this.options.renderTextMode === "raw-latex") {
+      return latex;
+    }
+    if (this.options.renderTextMode === undefined || this.options.renderTextMode === "delimited-latex") {
+      const displayMode = node.attrs.display === "yes";
+      const firstDelimiter = getDelimiter(displayMode ? "block" : "inline", "start", this.options);
+      let secondDelimiter = getDelimiter(displayMode ? "block" : "inline", "end", this.options);
+      return firstDelimiter + latex + secondDelimiter;
+    }
+
   },
 
   addKeyboardShortcuts() {
