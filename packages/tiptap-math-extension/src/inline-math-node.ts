@@ -228,12 +228,12 @@ export const InlineMathNode = Node.create<MathExtensionOptions>({
     if (this.options.renderTextMode === "raw-latex") {
       return latex;
     }
-    if (this.options.renderTextMode === undefined || this.options.renderTextMode === "delimited-latex") {
+    // if (this.options.renderTextMode === undefined || this.options.renderTextMode === "delimited-latex") {
       const displayMode = node.attrs.display === "yes";
       const firstDelimiter = getDelimiter(displayMode ? "block" : "inline", "start", this.options);
       let secondDelimiter = getDelimiter(displayMode ? "block" : "inline", "end", this.options);
       return firstDelimiter + latex + secondDelimiter;
-    }
+    // }
 
   },
 
