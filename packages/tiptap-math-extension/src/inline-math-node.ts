@@ -95,7 +95,6 @@ export const InlineMathNode = Node.create<MathExtensionOptions>({
         new InputRule({
           find: new RegExp(inlineRegex, ""),
           handler: (props) => {
-            console.log({ props });
             if (props.match[1].length === 0) {
               return;
             }
@@ -225,14 +224,15 @@ export const InlineMathNode = Node.create<MathExtensionOptions>({
     if (node.attrs.latex && typeof node.attrs.latex == "string") {
       latex = node.attrs.latex;
     }
-    if (this.options.renderTextMode === "raw-latex") {
-      return latex;
-    }
+    // if ( this.options.renderTextMode === "raw-latex") {
+    return latex;
+    // }
+    // TODO: Maybe re-enable the delimited-latex mode once there is a way to not re-trigger the input rule :(
     // if (this.options.renderTextMode === undefined || this.options.renderTextMode === "delimited-latex") {
-      const displayMode = node.attrs.display === "yes";
-      const firstDelimiter = getDelimiter(displayMode ? "block" : "inline", "start", this.options);
-      let secondDelimiter = getDelimiter(displayMode ? "block" : "inline", "end", this.options);
-      return firstDelimiter + latex + secondDelimiter;
+    // const displayMode = node.attrs.display === "yes";
+    // const firstDelimiter = getDelimiter(displayMode ? "block" : "inline", "start", this.options);
+    // let secondDelimiter = getDelimiter(displayMode ? "block" : "inline", "end", this.options);
+    // return firstDelimiter + latex + secondDelimiter;
     // }
 
   },
