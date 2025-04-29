@@ -95,13 +95,15 @@ export interface MathExtensionOption {
    * 
    * - `"none"`: do not include in text at all
    * - `"raw-latex"`: include the latex source, without delimiters (e.g., `\frac{1}{n}`)
-   * - `"delimited-latex"`: include the latex source with delimiters (e.g., `$\frac{1}{n}$`)
    * - `{placeholder: "[...]`"}: represent all math nodes as a fixed placeholder string (e.g., `[...]`)
+   * 
+   * The option delimited-latex is currently disabled because of issues with it re-triggering input rules (see also https://github.com/ueberdosis/tiptap/issues/2946).
+   * 
+   * - ~`"delimited-latex"`: include the latex source with delimiters (e.g., `$\frac{1}{n}$`)~
    */
-    renderTextMode?: "none"|"raw-latex"|"delimited-latex"|{placeholder: string},
+    renderTextMode?: "none"|"raw-latex"|{placeholder: string}, // |"delimited-latex"
 }
-export const DEFAULT_OPTIONS: MathExtensionOption = { addInlineMath: true, evaluation: false, delimiters: "dollar" };
-
+export const DEFAULT_OPTIONS: MathExtensionOption = { addInlineMath: true, evaluation: false, delimiters: "dollar", renderTextMode: "raw-latex" };
 ```
 
 See https://katex.org/docs/options.html for a complete list of the available KaTeX options.
