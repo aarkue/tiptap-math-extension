@@ -9,6 +9,16 @@ import { generateID } from "./util/generate-id";
 import { updateEvaluation } from "./latex-evaluation/update-evaluation";
 import { DEFAULT_OPTIONS, MathExtensionOption, MathExtensionOption as MathExtensionOptions } from "./util/options";
 
+// Strongly type tiptap storage
+declare module '@tiptap/core' {
+    interface Storage {
+      inlineMath: {
+         variables: MathVariables;
+          variableListeners: AllVariableUpdateListeners;
+      }
+    }
+  }
+
 export const InlineMathNode = Node.create<MathExtensionOptions>({
   name: "inlineMath",
   group: "inline",
@@ -292,7 +302,7 @@ export const InlineMathNode = Node.create<MathExtensionOptions>({
         outerSpan.append(resultSpan);
         resultSpan.classList.add("tiptap-math", "result");
         resultSpan.classList.add("katex");
-        const evalRes = updateEvaluation(latex, id, resultSpan, showEvalResult, this.editor.storage.inlineMath);
+        const evalRes = updateEvaluation(latex, id, resultSpan, showEvalResult, this.editor.extensionStorage.inlineMath);
         // On click, update the evaluate attribute (effectively triggering whether the result is shown)
         outerSpan.addEventListener("click", (ev) => {
           if (editor.isEditable && typeof getPos === "function") {
@@ -300,7 +310,7 @@ export const InlineMathNode = Node.create<MathExtensionOptions>({
               .chain()
               .command(({ tr }) => {
                 const position = getPos();
-                tr.setNodeAttribute(position, "evaluate", !showEvalResult ? "yes" : "no");
+                tr.setNodeAttribute(position!, "evaluate", !showEvalResult ? "yes" : "no");
                 return true;
               })
               .run();
